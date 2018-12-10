@@ -8,15 +8,12 @@ declare let require: any;
 
 @Injectable()
 export class PropertiesService {
-    production: boolean;
-    apiUrl: string;
+  production: boolean;
+  apiUrl: string;
 
-    constructor() {
+  constructor() {
+    this.production = environment.production;
+    this.apiUrl = environment.apiUrl;
 
-    }
-
-    getProperties() {
-        this.production = environment.production;
-        this.apiUrl = environment.apiUrl;
-    }
+  }
 }
