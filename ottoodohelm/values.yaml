@@ -1,0 +1,23 @@
+api:
+  replicaCount: 3
+  containerPort: 5000
+  image:
+    repository: 1306130010/ottoodoapi
+    tag: latest
+    pullPolicy: IfNotPresent
+  resources: 
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  service:
+    type: ClusterIP
+    port: 80
+
+nameOverride: ""
+fullnameOverride: ""
+
+
+

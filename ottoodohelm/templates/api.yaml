@@ -1,0 +1,46 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ include "ottoodo.apiname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "ottoodo.apiname" . }}
+    helm.sh/chart: {{ include "ottoodo.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.api.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "ottoodo.apiname" . }}
+      instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "ottoodo.apiname" . }}
+        instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-api
+          image: "{{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}"
+          imagePullPolicy: {{ .Values.api.image.pullPolicy }}
+          env:
+          - name: MongoService__Host
+            valueFrom:
+              secretKeyRef:
+                name: ottoodo
+                key: connection
+          - name: MongoService__DbName
+            value: ottoodo
+          ports:
+            - containerPort: {{ .Values.api.containerPort }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.api.containerPort }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.api.containerPort }}
+          resources:
+{{ toYaml .Values.api.resources | indent 12 }}
