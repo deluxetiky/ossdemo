@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using OttooDo.Extensions;
+using OttooDo.Filter;
 using OttooDo.Mapper.Service;
 
 namespace OttooDo
@@ -32,6 +33,9 @@ namespace OttooDo
             services.RegisterServices(Configuration);
             services.AutoMapperRegister(new ServiceProfile());
             services.AddCors();
+            services.AddMvc(c => {
+                c.Filters.Add(typeof(ExceptionFilter));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
