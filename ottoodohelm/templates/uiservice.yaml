@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ottoodo.uiname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "ottoodo.uiname" . }}
+    helm.sh/chart: {{ include "ottoodo.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  annotations:
+    getambassador.io/config: |
+            ---
+            apiVersion: ambassador/v0
+            kind: Mapping
+            name: {{ include "ottoodo.uiname" . }}_{{ .Release.Namespace  }}_mapping
+            host: ossdemo.ottoo.com
+            prefix: /
+            rewrite: /
+            service: {{ include "ottoodo.uiname" . }}.{{ .Release.Namespace  }}
+            timeout_ms: 15000 #15 sec
+            envoy_override:
+                retry_policy:
+                    retry_on: connect-failure
+                    num_retries: 4  
+spec:
+  type: {{  .Values.ui.service.type }}
+  ports:
+    - port: {{  .Values.ui.service.port }}
+      targetPort: {{  .Values.ui.containerPort }}
+      protocol: TCP
+  selector:
+    app: {{ include "ottoodo.uiname" . }}
+    instance: {{ .Release.Name }}

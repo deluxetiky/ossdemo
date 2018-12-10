@@ -6,6 +6,18 @@ Expand the name of the chart.
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
+{{- define "ottoodo.apiname" -}}
+{{- default .Chart.Name .Values.api.name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{- define "ottoodo.socketname" -}}
+{{- default .Chart.Name .Values.socket.name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{- define "ottoodo.uiname" -}}
+{{- default .Chart.Name .Values.ui.name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
 {{/*
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
