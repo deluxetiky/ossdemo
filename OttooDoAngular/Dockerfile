@@ -21,9 +21,10 @@ RUN  node --max_old_space_size=1024 ./node_modules/@angular/cli/bin/ng build --c
 ### STAGE 2: Setup ###
 FROM nginx:1.13.3-alpine
 ## Copy our default nginx config
-COPY OttooDoAngular/nginx/default.conf /etc/nginx/conf.d/
+COPY OttooDoAngular/nginx/default.conf /etc/nginx/conf.d/default.conf
 ## Remove default nginx website
 RUN rm -rf /usr/share/nginx/html/*
 ## From 'builder' stage copy over the artifacts in dist folder to default nginx public folder
-COPY --from=builder /OttooDoAngular/dist /usr/share/nginx/html
+COPY --from=builder /OttooDoAngular/dist/** /usr/share/nginx/html
+
 CMD ["nginx", "-g", "daemon off;"]
