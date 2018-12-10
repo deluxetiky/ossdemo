@@ -1,0 +1,60 @@
+api:
+  replicaCount: 1
+  containerPort: 5000
+  name: apiserver
+  image:
+    repository: 1306130010/ottoodoapi
+    tag: latest
+    pullPolicy: Always
+  resources: 
+    limits:
+      cpu: 200m
+      memory: 200Mi
+    requests:
+      cpu: 200m
+      memory: 200Mi
+  service:
+    type: ClusterIP
+    port: 80
+socket:
+  replicaCount: 1
+  containerPort: 5001
+  name: socketserver
+  image:
+    repository: 1306130010/ottoodosocket
+    tag: latest
+    pullPolicy: Always
+  resources: 
+    limits:
+      cpu: 200m
+      memory: 200Mi
+    requests:
+      cpu: 200m
+      memory: 200Mi
+  service:
+    type: ClusterIP
+    port: 80
+ui:
+  replicaCount: 1
+  containerPort: 80
+  name: ui
+  image:
+    repository: 1306130010/ottoodoui
+    tag: latest
+    pullPolicy: Always
+  resources: 
+    limits:
+      cpu: 50m
+      memory: 100Mi
+    requests:
+      cpu: 50m
+      memory: 100Mi
+  service:
+    type: ClusterIP
+    port: 80
+
+nameOverride: ""
+fullnameOverride: ""
+
+
+

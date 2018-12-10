@@ -1,0 +1,40 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ include "ottoodo.socketname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "ottoodo.socketname" . }}
+    helm.sh/chart: {{ include "ottoodo.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.socket.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "ottoodo.socketname" . }}
+      instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "ottoodo.socketname" . }}
+        instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-api
+          image: "{{ .Values.socket.image.repository }}:{{ .Values.socket.image.tag }}"
+          imagePullPolicy: {{ .Values.socket.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.socket.containerPort }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.socket.containerPort }}
+            periodSeconds: 120
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.socket.containerPort }}
+            periodSeconds: 20
+          resources:
+{{ toYaml .Values.socket.resources | indent 12 }}
