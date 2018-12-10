@@ -40,7 +40,7 @@ namespace OttooDo.Service
             return _mapper.Map<TaskElementDto>(task);
         }
 
-        public async Task<TaskElementDto> FindById(string id)
+        public async Task<TaskElementDto> FindByIdAsync(string id)
         {
             var task = await _taskRepository.FindAsync(id);
             //if (record == null)
