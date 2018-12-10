@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using OttooDo.Extensions;
 using OttooDo.Interface.Repository;
 using OttooDo.Interface.Service;
 using OttooDo.Model.Dto;
@@ -14,21 +15,25 @@ namespace OttooDo.Service
     {
         private readonly ITaskRepository _taskRepository;
         private readonly IMapper _mapper;
+        private readonly ITaskTransportRepository _taskTransportRepository;
 
         public TaskService(IMapper mapper,
-                            ITaskRepository taskRepository)
+                           ITaskRepository taskRepository,
+                           ITaskTransportRepository taskTransportRepository)
         {
             _taskRepository = taskRepository;
             _mapper = mapper;
+            _taskTransportRepository = taskTransportRepository;
         }
-
 
         public async Task<TaskElementDto> AddAsync(TaskElementDto taskElementDto)
         {
             var taskElement = new TaskElement();
             _mapper.Map(taskElementDto, taskElement);
             await _taskRepository.InsertAsync(taskElement);
-            return _mapper.Map<TaskElementDto>(taskElement);
+            var taskElementDtoResult = _mapper.Map<TaskElementDto>(taskElement);
+            await _taskTransportRepository.Send(SocketConstants.TaskAdd, taskElementDtoResult);
+            return taskElementDtoResult;
         }
 
         public async Task<TaskElementDto> DeleteAsync(string id)
@@ -37,7 +42,9 @@ namespace OttooDo.Service
             //if (task == null)
             //    throw new ApplicationCodedException(ErrorCodes.AppError1015);//Driver couldn't found.
             await _taskRepository.DeleteAsync(task);
-            return _mapper.Map<TaskElementDto>(task);
+            var taskElementDto = _mapper.Map<TaskElementDto>(task);
+            await _taskTransportRepository.Send(SocketConstants.TaskDelete, taskElementDto);
+            return taskElementDto;
         }
 
         public async Task<TaskElementDto> FindByIdAsync(string id)
@@ -62,8 +69,10 @@ namespace OttooDo.Service
             //    throw new ApplicationCodedException(ErrorCodes.AppError1015);//Driver couldn't found.
             //}
             _mapper.Map(entity, taskDbElement);
-            var res = await _taskRepository.UpdateAsync(taskDbElement);
-            return _mapper.Map<TaskElementDto>(taskDbElement);
+            await _taskRepository.UpdateAsync(taskDbElement);
+            var taskElementDto = _mapper.Map<TaskElementDto>(taskDbElement);
+            await _taskTransportRepository.Send(SocketConstants.TaskUpdate, taskElementDto);
+            return taskElementDto;
         }
     }
 }

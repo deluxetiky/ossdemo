@@ -31,12 +31,12 @@ namespace OttooDo
 
             try
             {
-                Log.Information("Getting the ottoo api running...");
+                Log.Information("Getting the OttooDoApi running...");
                 CreateWebHostBuilder(args).Run();
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex, "Ottoo Api Host terminated unexpectedly");
+                Log.Fatal(ex, "OttooDoApi terminated unexpectedly.");
             }
             finally
             {

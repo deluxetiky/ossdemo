@@ -5,6 +5,7 @@ using OttooDo.Interface.Repository;
 using OttooDo.Interface.Service;
 using OttooDo.Mapper.Service;
 using OttooDo.Repository.Mongo;
+using OttooDo.Repository.SignalR;
 using OttooDo.Service;
 using System;
 using System.Collections.Generic;
@@ -19,9 +20,11 @@ namespace OttooDo.Extensions
         {
             var mongoUrl = configuration.GetValue<string>("MongoService:Host");
             var mongoDb = configuration.GetValue<string>("MongoService:DbName");
+            var socketHost = configuration.GetValue<string>("Socket:Host");
 
             services.AddSingleton<ITaskService, TaskService>();
             services.AddSingleton<ITaskRepository>((c) => new TaskRepositoryMongo(mongoUrl, mongoDb, "Task"));
+            services.AddSingleton<ITaskTransportRepository>((c) => new TaskTransportRepositorySignalR(socketHost));
         }
 
         public static void AutoMapperRegister(this IServiceCollection services, params Profile[] profiles)
