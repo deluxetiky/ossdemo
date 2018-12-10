@@ -10,10 +10,11 @@ declare let require: any;
 export class PropertiesService {
   production: boolean;
   apiUrl: string;
+  socketApiUrl: string;
 
   constructor() {
     this.production = environment.production;
     this.apiUrl = environment.apiUrl;
-
+    this.socketApiUrl = environment.socketApiUrl;
   }
 }

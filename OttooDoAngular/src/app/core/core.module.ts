@@ -3,6 +3,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 
 import { PropertiesService } from './services/properties.service';
+import { SignalRService } from './services/signal-r.service';
 
 @NgModule({
   declarations: [],
@@ -13,6 +14,7 @@ import { PropertiesService } from './services/properties.service';
   exports: [],
   providers: [
     PropertiesService,
+    SignalRService
   ],
 })
 export class CoreModule { }
