@@ -70,8 +70,8 @@ export class TaskComponent implements OnInit {
   create() {
     this.taskService.create(this.task).subscribe((newTask: TaskElementModel) => {
       this.socketAdd(newTask);
-      this.task = new TaskElementModel();
     });
+    this.task = new TaskElementModel();
   }
 
   remove(task: TaskElementModel) {
