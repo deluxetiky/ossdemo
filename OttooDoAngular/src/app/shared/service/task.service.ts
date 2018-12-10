@@ -34,4 +34,8 @@ export class TaskService {
   delete(id: string): Observable<TaskElementModel> {
     return this.http.delete<TaskElementModel>(this.apiUrl + '/' + id);
   }
+
+  favorite(id: string): Observable<TaskElementModel> {
+    return this.http.put<TaskElementModel>(this.apiUrl + '/favorite/' + id, {});
+  }
 }
