@@ -47,6 +47,7 @@ namespace OttooDo
         public static IWebHost CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
+            .UseUrls("http://*:5000")
                 .Build();
     }
 }

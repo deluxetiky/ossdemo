@@ -10,5 +10,6 @@ namespace OttooDo.Extensions
         public static string TaskAdd = "TaskAdd";
         public static string TaskDelete = "TaskDelete";
         public static string TaskUpdate = "TaskUpdate";
+        public static string TaskFavorite = "TaskFavorite";
     }
 }

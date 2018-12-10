@@ -12,6 +12,7 @@ namespace OttooDo.Interface.Service
         Task<TaskElementDto> DeleteAsync(string id);
         Task<TaskElementDto> FindByIdAsync(string id);
         List<TaskElementDto> GetTasks();
+        Task<TaskElementDto> AddFavorite(string id);
         Task<TaskElementDto> UpdateAsync(TaskElementDto entity);
     }
 }
