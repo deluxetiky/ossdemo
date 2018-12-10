@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Serilog;
 
-namespace OttooDo
+namespace OttooDoSocket
 {
     public class Program
     {
@@ -23,20 +23,20 @@ namespace OttooDo
         public static void Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
-                   .MinimumLevel.Information()
-                   .ReadFrom.Configuration(Configuration)
-                   .Enrich.FromLogContext()
-                   .WriteTo.Console()
-                   .CreateLogger();
+                .MinimumLevel.Information()
+                .ReadFrom.Configuration(Configuration)
+                .Enrich.FromLogContext()
+                .WriteTo.Console()
+                .CreateLogger();
 
             try
             {
-                Log.Information("Getting the OttooDoApi running...");
+                Log.Information("Getting the OttooDoSocket running...");
                 CreateWebHostBuilder(args).Run();
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex, "OttooDoApi terminated unexpectedly.");
+                Log.Fatal(ex, "OttooDoSocket terminated unexpectedly.");
             }
             finally
             {
@@ -47,7 +47,7 @@ namespace OttooDo
         public static IWebHost CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-            .UseUrls("http://*:5000")
+            .UseUrls("http://*:5001")
                 .Build();
     }
 }

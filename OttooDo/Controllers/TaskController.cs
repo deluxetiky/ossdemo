@@ -24,7 +24,7 @@ namespace OttooDo.Controllers
         [Route("")]
         public IActionResult GetTasks()
         {
-            var tasks = _taskService.GetTasks();
+            var tasks = _taskService.GetTasks().OrderByDescending(a => a.FavoriteCount).ToList();
             return Ok(tasks);
         }
 
@@ -49,6 +49,14 @@ namespace OttooDo.Controllers
         public async Task<IActionResult> UpdateTask([FromBody]TaskElementDto task)
         {
             var res = await _taskService.UpdateAsync(task);
+            return Ok(res);
+        }
+
+        [HttpPut]
+        [Route("favorite/{id}")]
+        public async Task<IActionResult> UpdateFavoriteTask([FromRoute]string id)
+        {
+            var res = await _taskService.AddFavorite(id);
             return Ok(res);
         }
 

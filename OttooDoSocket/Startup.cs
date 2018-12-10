@@ -5,17 +5,15 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using OttooDo.Extensions;
-using OttooDo.Filter;
-using OttooDo.Mapper.Service;
+using Newtonsoft.Json;
+using OttooDoSocket.SignalRHub;
 
-namespace OttooDo
+namespace OttooDoSocket
 {
     public class Startup
     {
@@ -29,13 +27,21 @@ namespace OttooDo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.RegisterServices(Configuration);
-            services.AutoMapperRegister(new ServiceProfile());
-            services.AddCors();
-            services.AddMvc(c => {
-                c.Filters.Add(typeof(ExceptionFilter));
+            services.AddSignalR().AddJsonProtocol(options =>
+            {
+                options.PayloadSerializerSettings.DateTimeZoneHandling =
+                DateTimeZoneHandling.Utc;
             });
+            services.AddCors(options => options.AddPolicy("CorsPolicy", builder =>
+            {
+                builder
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowAnyOrigin()
+                    .AllowCredentials()
+                    ;
+                ;
+            }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,19 +51,11 @@ namespace OttooDo
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                app.UseHsts();
-            }
 
-            app.UseCors(builder =>
-            {
-                builder.AllowAnyOrigin();
-                builder.AllowAnyMethod();
-                builder.AllowAnyHeader();
-            });
-            app.UseMvc();
-            app.Run(async context => { await context.Response.WriteAsync($"Api - {env.EnvironmentName} - {Environment.MachineName}"); });
+            app.UseCors("CorsPolicy");
+            app.UseSignalR(options => options.MapHub<TaskHub>("/socket/task"));
+
+            app.Run(async context => { await context.Response.WriteAsync($"Socket Api - {env.EnvironmentName} - {Environment.MachineName}"); });
         }
     }
 }
