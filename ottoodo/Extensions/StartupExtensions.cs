@@ -7,6 +7,7 @@ using OttooDo.Mapper.Service;
 using OttooDo.Repository.Mongo;
 using OttooDo.Repository.SignalR;
 using OttooDo.Service;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,9 @@ namespace OttooDo.Extensions
             var mongoUrl = configuration.GetValue<string>("MongoService:Host");
             var mongoDb = configuration.GetValue<string>("MongoService:DbName");
             var socketHost = configuration.GetValue<string>("Socket:Host");
+
+            Log.Information("Mongo {@url}, {@db}", mongoUrl, mongoDb);
+            Log.Information("Socket {@url}", socketHost);
 
             services.AddSingleton<ITaskService, TaskService>();
             services.AddSingleton<ITaskRepository>((c) => new TaskRepositoryMongo(mongoUrl, mongoDb, "Task"));
