@@ -31,6 +31,8 @@ spec:
                 key: connection
           - name: MongoService__DbName
             value: ottoodo
+          - name: Socket__Host
+            value: http://{{ include "ottoodo.socketname" . }}.{{ .Release.Namespace  }}:80/
           ports:
             - containerPort: {{ .Values.api.containerPort }}
               protocol: TCP
@@ -38,9 +40,11 @@ spec:
             httpGet:
               path: /
               port: {{ .Values.api.containerPort }}
+            periodSeconds: 120
           readinessProbe:
             httpGet:
               path: /
               port: {{ .Values.api.containerPort }}
+            periodSeconds: 20
           resources:
 {{ toYaml .Values.api.resources | indent 12 }}

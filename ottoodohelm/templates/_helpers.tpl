@@ -7,7 +7,15 @@ Expand the name of the chart.
 {{- end -}}
 
 {{- define "ottoodo.apiname" -}}
-{{- default .Chart.Name .Values.nameOverride "api" | trunc 63 | trimSuffix "-" -}}
+{{- default .Chart.Name .Values.api.name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{- define "ottoodo.socketname" -}}
+{{- default .Chart.Name .Values.socket.name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{- define "ottoodo.uiname" -}}
+{{- default .Chart.Name .Values.ui.name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*

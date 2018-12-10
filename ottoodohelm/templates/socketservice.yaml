@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ottoodo.socketname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "ottoodo.socketname" . }}
+    helm.sh/chart: {{ include "ottoodo.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  annotations:
+    getambassador.io/config: |
+            ---
+            apiVersion: ambassador/v0
+            kind: Mapping
+            name: {{ include "ottoodo.socketname" . }}_sock
+            host: ossdemo.ottoo.com
+            prefix: /socket/
+            rewrite: /socket/
+            service: {{ include "ottoodo.socketname" . }}.{{ .Release.Namespace  }}
+            use_websocket: true
+spec:
+  type: {{ .Values.socket.service.type }}
+  ports:
+    - port: {{ .Values.socket.service.port }}
+      targetPort: {{ .Values.socket.containerPort }}
+      protocol: TCP
+  selector:
+    app: {{ include "ottoodo.socketname" . }}
+    instance: {{ .Release.Name }}
