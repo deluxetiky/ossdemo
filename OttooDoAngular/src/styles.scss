@@ -6,7 +6,7 @@ body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
-    background: rgb(187, 222, 240);
+    background: #fff;
 }
 
 ul {
@@ -85,11 +85,12 @@ ul li {
     background: white;
     padding: .75em 1.2em;
     border-radius: .3em;
-    margin: .5em 0;
+    margin: 1em 0;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     line-height: 1.5;
+    box-shadow: 0 4px 10px 0 rgba(0,0,0,0.2);
 }
 
 .favs ul li svg,
