@@ -53,7 +53,7 @@ namespace OttooDo
                 builder.AllowAnyHeader();
             });
             app.UseMvc();
-            app.Run(async context => { await context.Response.WriteAsync($"Api - {env.EnvironmentName}"); });
+            app.Run(async context => { await context.Response.WriteAsync($"Api - {env.EnvironmentName} - {Environment.MachineName}"); });
         }
     }
 }
