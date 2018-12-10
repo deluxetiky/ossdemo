@@ -17,7 +17,6 @@ export class SignalRService {
   startConnection(): Observable<any> {
     return Observable.create(observer => {
 
-      console.log(this.propertiesService.socketApiUrl + 'socket/task');
       this.hubConnection = new HubConnectionBuilder().withUrl(
         this.propertiesService.socketApiUrl + 'socket/task')
         .configureLogging(this.propertiesService.production ? LogLevel.Error : LogLevel.Trace)
