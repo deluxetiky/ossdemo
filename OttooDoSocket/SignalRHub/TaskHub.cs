@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using OttooDoSocket.Model.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,11 +9,9 @@ namespace OttooDoSocket.SignalRHub
 {
     public class TaskHub : Hub
     {
-        public override async Task OnConnectedAsync()
+        public async Task SendTaskProcess(string processName, TaskElementDto task)
         {
-            //await Groups.AddToGroupAsync(Context.ConnectionId, fleetId);
-            //await base.OnConnectedAsync();
+            await Clients.All.SendAsync("TaskProcess", processName, task);
         }
-
     }
 }
