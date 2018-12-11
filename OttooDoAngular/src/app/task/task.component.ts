@@ -36,6 +36,9 @@ export class TaskComponent implements OnInit {
   }
 
   socketAdd(task: TaskElementModel) {
+    if (!task || !task.id) {
+      return;
+    }
     if (!this.tasks.some((tempTask: TaskElementModel) => tempTask.id === task.id)) {
       this.tasks.unshift(task);
       this.sort();
@@ -43,6 +46,9 @@ export class TaskComponent implements OnInit {
   }
 
   socketDelete(task: TaskElementModel) {
+    if (!task || !task.id) {
+      return;
+    }
     const position = this.tasks.findIndex((tempTask: TaskElementModel) => tempTask.id === task.id);
     if (position > -1) {
       this.tasks.splice(position, 1);
@@ -50,6 +56,9 @@ export class TaskComponent implements OnInit {
   }
 
   socketFavorite(task: TaskElementModel) {
+    if (!task || !task.id) {
+      return;
+    }
     const tempTasks = this.tasks.find((value: TaskElementModel) => value.id === task.id);
     if (tempTasks) {
       if (task.lastUpdatedTime > tempTasks.lastUpdatedTime) {
@@ -70,8 +79,8 @@ export class TaskComponent implements OnInit {
   create() {
     this.taskService.create(this.task).subscribe((newTask: TaskElementModel) => {
       this.socketAdd(newTask);
-      this.task = new TaskElementModel();
     });
+    this.task = new TaskElementModel();
   }
 
   remove(task: TaskElementModel) {

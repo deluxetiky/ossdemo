@@ -51,7 +51,7 @@ namespace OttooDoSocket
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            
             app.UseCors("CorsPolicy");
             app.UseSignalR(options => options.MapHub<TaskHub>("/socket/task"));
 
